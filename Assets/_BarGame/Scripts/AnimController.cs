@@ -51,7 +51,7 @@ public class AnimController : MonoBehaviour
 
         else isMoving = false;
 
-        //Debug.Log($"isMoving = {isMoving}");
+        // Debug.Log($"isMoving = {isMoving}");
     }
 
     private void AnimateCharacter()

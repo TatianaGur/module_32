@@ -21,17 +21,17 @@ public class CharactersController : MonoBehaviour
 
     private void Update()
     {
-        if (_agent.isActiveAndEnabled && _currentTarget != null && !isWalking)
+        if (_agent.isActiveAndEnabled && _currentTarget != null && isWalking)
         {
             if (HasPathReady() && HasReachedDestination())
             {
-                isWalking = true;
+                isWalking = false;
 
                 StartCoroutine(WaitRandomSeconds());
 
-                SelectNewTarget();
+                //SelectNewTarget();
 
-                isWalking = false;
+                //isWalking = true;
             }
         }
     }
@@ -60,5 +60,9 @@ public class CharactersController : MonoBehaviour
         Debug.Log($"waitingTime = {waitingTime}");
 
         yield return new WaitForSeconds(waitingTime);
+
+        SelectNewTarget();
+
+        isWalking = true;
     }
 }
