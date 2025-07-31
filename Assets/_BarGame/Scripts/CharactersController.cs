@@ -17,6 +17,8 @@ public class CharactersController : MonoBehaviour
         if (_targets.Length == 0) Debug.LogError("No targets!");
 
         SelectNewTarget();
+
+        isWalking = true;
     }
 
     private void Update()
@@ -28,10 +30,6 @@ public class CharactersController : MonoBehaviour
                 isWalking = false;
 
                 StartCoroutine(WaitRandomSeconds());
-
-                //SelectNewTarget();
-
-                //isWalking = true;
             }
         }
     }
@@ -55,7 +53,9 @@ public class CharactersController : MonoBehaviour
 
     private IEnumerator WaitRandomSeconds()
     {
-        float waitingTime = Random.Range(10, 31);
+        Debug.Log($"in WaitRandomSeconds, isWalking = {isWalking}");
+
+        float waitingTime = Random.Range(2, 9);
 
         Debug.Log($"waitingTime = {waitingTime}");
 
@@ -64,5 +64,7 @@ public class CharactersController : MonoBehaviour
         SelectNewTarget();
 
         isWalking = true;
+
+        Debug.Log($"end of WaitRandomSeconds, isWalking = {isWalking}");
     }
 }
