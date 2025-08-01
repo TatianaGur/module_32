@@ -4,14 +4,15 @@ using UnityEngine.AI;
 public class AnimController : MonoBehaviour
 {
     [SerializeField] private NavMeshAgent _agent;
-    [SerializeField] GameObject _cocktail;
+    [SerializeField] private GameObject _cocktail;
+    [SerializeField] private Transform _tableForLookingAt;
 
     private Animator anim;
     private InDanceFloorTrigger _inDanceFloorTrigger;
 
     private float rotationSpeed;
     private bool isMoving;
-    private bool isSitting;
+    private bool readyToSit;
 
     private bool inDanceFloor;
     private bool inLoungeZone;
@@ -27,7 +28,7 @@ public class AnimController : MonoBehaviour
         if (anim == null) Debug.Log("Anim = null");
 
         isMoving = false;
-        isSitting = false;
+        readyToSit = true;
 
         inDanceFloor = false;
         inLoungeZone = false;
@@ -55,8 +56,17 @@ public class AnimController : MonoBehaviour
 
     private void AnimateCharacter()
     {
+        if (isMoving && inLoungeZone)
+        {
+            readyToSit = true;
+            anim.SetBool("IsSitting", false);
+            anim.SetTrigger("StandUp");
+        }
+
+
         if (isMoving) anim.SetBool("IsMoving", true);
 
+        
 
         else if (!isMoving)
         {
@@ -76,6 +86,22 @@ public class AnimController : MonoBehaviour
             {
                 anim.SetBool("InBarCounterZone", false);
                 _cocktail.SetActive(false);
+            }
+
+            if (inLoungeZone)
+            {
+                anim.SetBool("InLoungeZone", true);
+
+                if (readyToSit)
+                {
+                    if (_tableForLookingAt != null) transform.LookAt(_tableForLookingAt.position);
+                    anim.SetTrigger("SitDown");
+                    readyToSit = false;
+                }
+
+                if (!readyToSit) anim.SetBool("IsSitting", true);
+
+                
             }
 
         }
@@ -115,6 +141,14 @@ public class AnimController : MonoBehaviour
         inDanceFloor = false;
         inLoungeZone = false;
         inBarCounterZone = true;
+        inHallZone = false;
+    }
+
+    public void InLoungeZone()
+    {
+        inDanceFloor = false;
+        inLoungeZone = true;
+        inBarCounterZone = false;
         inHallZone = false;
     }
 }
