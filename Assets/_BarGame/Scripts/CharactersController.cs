@@ -53,18 +53,12 @@ public class CharactersController : MonoBehaviour
 
     private IEnumerator WaitRandomSeconds()
     {
-        Debug.Log($"in WaitRandomSeconds, isWalking = {isWalking}");
-
         float waitingTime = Random.Range(2, 9);
-
-        Debug.Log($"waitingTime = {waitingTime}");
 
         yield return new WaitForSeconds(waitingTime);
 
         SelectNewTarget();
 
         isWalking = true;
-
-        Debug.Log($"end of WaitRandomSeconds, isWalking = {isWalking}");
     }
 }

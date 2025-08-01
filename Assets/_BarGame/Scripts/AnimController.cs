@@ -4,6 +4,7 @@ using UnityEngine.AI;
 public class AnimController : MonoBehaviour
 {
     [SerializeField] private NavMeshAgent _agent;
+    [SerializeField] GameObject _cocktail;
 
     private Animator anim;
     private InDanceFloorTrigger _inDanceFloorTrigger;
@@ -50,16 +51,34 @@ public class AnimController : MonoBehaviour
         }
 
         else isMoving = false;
-
-        //Debug.Log($"isMoving = {isMoving}");
     }
 
     private void AnimateCharacter()
     {
         if (isMoving) anim.SetBool("IsMoving", true);
-        else anim.SetBool("IsMoving", false);
 
-        if (!isMoving && inDanceFloor) anim.SetBool("InDanceFloor", true);
+
+        else if (!isMoving)
+        {
+            anim.SetBool("IsMoving", false);
+
+            if (inDanceFloor) anim.SetBool("InDanceFloor", true);
+            else anim.SetBool("InDanceFloor", false);
+            if (inHallZone) anim.SetBool("InHallZone", true);
+            else anim.SetBool("InHallZone", false);
+
+            if (inBarCounterZone)
+            {
+                anim.SetBool("InBarCounterZone", true);
+                _cocktail.SetActive(true);
+            }
+            else
+            {
+                anim.SetBool("InBarCounterZone", false);
+                _cocktail.SetActive(false);
+            }
+
+        }
     }
 
     private void ChangeDirection()
@@ -83,11 +102,19 @@ public class AnimController : MonoBehaviour
         inHallZone = false;
     }
 
-    public void InHallFloor()
+    public void InHallZone()
     {
         inDanceFloor = false;
         inLoungeZone = false;
         inBarCounterZone = false;
         inHallZone = true;
+    }
+
+    public void InBarCounterZone()
+    {
+        inDanceFloor = false;
+        inLoungeZone = false;
+        inBarCounterZone = true;
+        inHallZone = false;
     }
 }

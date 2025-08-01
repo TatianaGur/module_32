@@ -1,16 +1,16 @@
 using UnityEngine;
 
-public class InDanceFloorTrigger : MonoBehaviour
+public class InHallZoneTrigger : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("In floorTrigger");
+        Debug.Log("In HallZoneTrigger");
 
         if (other.gameObject.TryGetComponent<AnimController>(out var animController))
         {
-            animController.InDanceFloor();
+            animController.InHallZone();
 
-            Debug.Log("inDanceFloor Trigger works!");
+            Debug.Log("inHallZoneTrigger works!");
         }
     }
 }
