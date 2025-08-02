@@ -7,8 +7,6 @@ public class InDanceFloorTrigger : MonoBehaviour
         if (other.gameObject.TryGetComponent<AnimController>(out var animController))
         {
             animController.InDanceFloor();
-
-            Debug.Log("inDanceFloor Trigger works!");
         }
     }
 }

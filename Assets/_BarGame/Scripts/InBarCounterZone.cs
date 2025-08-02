@@ -7,8 +7,6 @@ public class InBarCounterZone : MonoBehaviour
         if (other.gameObject.TryGetComponent<AnimController>(out var animController))
         {
             animController.InBarCounterZone();
-
-            Debug.Log("BarCounterZoneTrigger works!");
         }
     }
 }

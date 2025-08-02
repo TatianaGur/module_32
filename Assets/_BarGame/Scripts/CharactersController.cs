@@ -36,7 +36,7 @@ public class CharactersController : MonoBehaviour
             }
         }
 
-        //если толкается с другими на одном месте более 10сек, то SelectNewTarget
+        //сделать если толкается с другими на одном месте более 10сек, то SelectNewTarget
     }
 
     private bool HasPathReady()

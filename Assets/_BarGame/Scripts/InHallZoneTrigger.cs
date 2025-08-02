@@ -7,8 +7,6 @@ public class InHallZoneTrigger : MonoBehaviour
         if (other.gameObject.TryGetComponent<AnimController>(out var animController))
         {
             animController.InHallZone();
-
-            Debug.Log("inHallZoneTrigger works!");
         }
     }
 }

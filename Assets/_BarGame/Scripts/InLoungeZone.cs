@@ -7,8 +7,6 @@ public class InLoungeZone : MonoBehaviour
         if (other.gameObject.TryGetComponent<AnimController>(out var animController))
         {
             animController.InLoungeZone();
-
-            Debug.Log("LoungeZoneTrigger works!");
         }
     }
 }
