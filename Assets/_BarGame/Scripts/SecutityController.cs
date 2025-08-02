@@ -1,15 +1,17 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
+using VContainer;
 
-public class CharactersController : MonoBehaviour
+public class SecutityController : MonoBehaviour
 {
-    [SerializeField] private Transform _currentTarget;
-    [SerializeField] private Transform[] _targets;
-
     [SerializeField] private NavMeshAgent _agent;
 
+    private Transform _currentTarget;
+    private Transform[] _targets;
+
     private bool isWalking;
+    private InDanceFloorTrigger _inDanceFloorTrigger;
 
 
     private void Start()
@@ -19,9 +21,12 @@ public class CharactersController : MonoBehaviour
         SelectNewTarget();
 
         isWalking = true;
+    }
 
-        //_agent = GetComponent<NavMeshAgent>();
-        //if (_agent == null) Debug.Log("_agent is null");
+    [Inject]
+    public void Construct(InDanceFloorTrigger inDanceFloorTrigger)
+    {
+        _inDanceFloorTrigger = inDanceFloorTrigger;
     }
 
     private void Update()
@@ -63,5 +68,30 @@ public class CharactersController : MonoBehaviour
         SelectNewTarget();
 
         isWalking = true;
+    }
+
+    private void OnEnable()
+    {
+        _inDanceFloorTrigger.TargetsArrayChangedEvent += TargetsArrayChanged;
+    }
+
+    private void OnDisable()
+    {
+        _inDanceFloorTrigger.TargetsArrayChangedEvent -= TargetsArrayChanged;
+    }
+
+    private void TargetsArrayChanged()
+    {
+        _targets = _inDanceFloorTrigger.SecurityTargets;
+
+        if (_agent.isActiveAndEnabled && _currentTarget != null && isWalking)
+        {
+            if (HasPathReady() && HasReachedDestination())
+            {
+                isWalking = false;
+
+                StartCoroutine(WaitRandomSeconds());
+            }
+        }
     }
 }

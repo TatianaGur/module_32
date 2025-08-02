@@ -8,7 +8,7 @@ public class AnimController : MonoBehaviour
 
     private NavMeshAgent _agent;
     private Animator _anim;
-    private InDanceFloorTrigger _inDanceFloorTrigger;
+    //private InDanceFloorTrigger _inDanceFloorTrigger;
 
     private float rotationSpeed;
     private bool isMoving;
@@ -103,10 +103,7 @@ public class AnimController : MonoBehaviour
                 }
 
                 if (!readyToSit) _anim.SetBool("IsSitting", true);
-
-                
             }
-
         }
     }
 
