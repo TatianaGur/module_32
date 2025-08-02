@@ -35,6 +35,8 @@ public class CharactersController : MonoBehaviour
                 StartCoroutine(WaitRandomSeconds());
             }
         }
+
+        //если толкается с другими на одном месте более 10сек, то SelectNewTarget
     }
 
     private bool HasPathReady()
