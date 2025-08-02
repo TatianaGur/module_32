@@ -4,8 +4,6 @@ public class InDanceFloorTrigger : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("In floorTrigger");
-
         if (other.gameObject.TryGetComponent<AnimController>(out var animController))
         {
             animController.InDanceFloor();

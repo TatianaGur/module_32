@@ -3,11 +3,11 @@ using UnityEngine.AI;
 
 public class AnimController : MonoBehaviour
 {
-    [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private GameObject _cocktail;
     [SerializeField] private Transform _tableForLookingAt;
 
-    private Animator anim;
+    private NavMeshAgent _agent;
+    private Animator _anim;
     private InDanceFloorTrigger _inDanceFloorTrigger;
 
     private float rotationSpeed;
@@ -24,8 +24,11 @@ public class AnimController : MonoBehaviour
     {
         rotationSpeed = 10f;
 
-        anim = GetComponent<Animator>();
-        if (anim == null) Debug.Log("Anim = null");
+        _anim = GetComponent<Animator>();
+        if (_anim == null) Debug.Log("Anim = null");
+
+        _agent = GetComponent<NavMeshAgent>();
+        if (_agent == null) Debug.Log("_agent == null");
 
         isMoving = false;
         readyToSit = true;
@@ -59,47 +62,47 @@ public class AnimController : MonoBehaviour
         if (isMoving && inLoungeZone)
         {
             readyToSit = true;
-            anim.SetBool("IsSitting", false);
-            anim.SetTrigger("StandUp");
+            _anim.SetBool("IsSitting", false);
+            _anim.SetTrigger("StandUp");
         }
 
 
-        if (isMoving) anim.SetBool("IsMoving", true);
+        if (isMoving) _anim.SetBool("IsMoving", true);
 
         
 
         else if (!isMoving)
         {
-            anim.SetBool("IsMoving", false);
+            _anim.SetBool("IsMoving", false);
 
-            if (inDanceFloor) anim.SetBool("InDanceFloor", true);
-            else anim.SetBool("InDanceFloor", false);
-            if (inHallZone) anim.SetBool("InHallZone", true);
-            else anim.SetBool("InHallZone", false);
+            if (inDanceFloor) _anim.SetBool("InDanceFloor", true);
+            else _anim.SetBool("InDanceFloor", false);
+            if (inHallZone) _anim.SetBool("InHallZone", true);
+            else _anim.SetBool("InHallZone", false);
 
             if (inBarCounterZone)
             {
-                anim.SetBool("InBarCounterZone", true);
+                _anim.SetBool("InBarCounterZone", true);
                 _cocktail.SetActive(true);
             }
             else
             {
-                anim.SetBool("InBarCounterZone", false);
+                _anim.SetBool("InBarCounterZone", false);
                 _cocktail.SetActive(false);
             }
 
             if (inLoungeZone)
             {
-                anim.SetBool("InLoungeZone", true);
+                _anim.SetBool("InLoungeZone", true);
 
                 if (readyToSit)
                 {
                     if (_tableForLookingAt != null) transform.LookAt(_tableForLookingAt.position);
-                    anim.SetTrigger("SitDown");
+                    _anim.SetTrigger("SitDown");
                     readyToSit = false;
                 }
 
-                if (!readyToSit) anim.SetBool("IsSitting", true);
+                if (!readyToSit) _anim.SetBool("IsSitting", true);
 
                 
             }

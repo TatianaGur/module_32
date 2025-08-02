@@ -19,6 +19,9 @@ public class CharactersController : MonoBehaviour
         SelectNewTarget();
 
         isWalking = true;
+
+        //_agent = GetComponent<NavMeshAgent>();
+        //if (_agent == null) Debug.Log("_agent is null");
     }
 
     private void Update()
