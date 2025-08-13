@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using VContainer;
+using Zenject;
 
 public class SecutityController : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class SecutityController : MonoBehaviour
     private Transform[] _targets;
 
     private bool isWalking;
-    private InDanceFloorTrigger _inDanceFloorTrigger;
+    //private InDanceFloorTrigger _inDanceFloorTrigger;
 
 
     private void Start()
@@ -23,11 +24,16 @@ public class SecutityController : MonoBehaviour
         isWalking = true;
     }
 
-    [Inject]
+    private void OnTriggerEnter(Collider other)
+    {
+        
+    }
+
+    /*[Inject]
     public void Construct(InDanceFloorTrigger inDanceFloorTrigger)
     {
         _inDanceFloorTrigger = inDanceFloorTrigger;
-    }
+    }*/
 
     private void Update()
     {
@@ -72,17 +78,17 @@ public class SecutityController : MonoBehaviour
 
     private void OnEnable()
     {
-        _inDanceFloorTrigger.TargetsArrayChangedEvent += TargetsArrayChanged;
+        //_inDanceFloorTrigger.TargetsArrayChangedEvent += TargetsArrayChanged;
     }
 
     private void OnDisable()
     {
-        _inDanceFloorTrigger.TargetsArrayChangedEvent -= TargetsArrayChanged;
+        //_inDanceFloorTrigger.TargetsArrayChangedEvent -= TargetsArrayChanged;
     }
 
     private void TargetsArrayChanged()
     {
-        _targets = _inDanceFloorTrigger.SecurityTargets;
+        //_targets = _inDanceFloorTrigger.SecurityTargets;
 
         if (_agent.isActiveAndEnabled && _currentTarget != null && isWalking)
         {
