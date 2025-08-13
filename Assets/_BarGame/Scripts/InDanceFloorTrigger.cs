@@ -1,14 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
+//using VContainer;
+using Zenject;
 
 public class InDanceFloorTrigger : MonoBehaviour
 {
-    public delegate void TargetsArrayChangedDelegate();
-    public event TargetsArrayChangedDelegate TargetsArrayChangedEvent;
+    //public delegate void TargetsArrayChangedDelegate();
+    //public event TargetsArrayChangedDelegate TargetsArrayChangedEvent;
 
 
 
     public Transform[] SecurityTargets;
+
+    private SignalBus _signalBus;
+
+
+    [Inject]
+    public void Construct(SignalBus signalBus)
+    {
+        _signalBus = signalBus;
+    }
 
 
     private void OnTriggerEnter(Collider other)
@@ -42,7 +53,8 @@ public class InDanceFloorTrigger : MonoBehaviour
 
         SecurityTargets = targetsList.ToArray();
 
-        TargetsArrayChangedEvent?.Invoke();
+        //TargetsArrayChangedEvent?.Invoke();
+        _signalBus.Fire<TargetsArrayChangedSignal>();
     }
 
     private void RemoveFromSecurityTargets(Transform securityTargets)
@@ -53,6 +65,7 @@ public class InDanceFloorTrigger : MonoBehaviour
 
         SecurityTargets = targetsList.ToArray();
 
-        TargetsArrayChangedEvent?.Invoke();
+        //TargetsArrayChangedEvent?.Invoke();
+        _signalBus.Fire<TargetsArrayChangedSignal>();
     }
 }

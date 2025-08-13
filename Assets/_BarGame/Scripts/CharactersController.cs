@@ -14,6 +14,7 @@ public class CharactersController : MonoBehaviour
 
     private void Start()
     {
+        _targets = new Transform[_targets.Length];
         if (_targets.Length == 0) Debug.LogError("No targets!");
 
         SelectNewTarget();

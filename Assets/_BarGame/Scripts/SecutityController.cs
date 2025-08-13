@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
-using VContainer;
+//using VContainer;
 using Zenject;
 
 public class SecutityController : MonoBehaviour
@@ -12,11 +12,15 @@ public class SecutityController : MonoBehaviour
     private Transform[] _targets;
 
     private bool isWalking;
-    //private InDanceFloorTrigger _inDanceFloorTrigger;
+    private InDanceFloorTrigger _inDanceFloorTrigger;
+
+
+    private SignalBus _signalBus;
 
 
     private void Start()
     {
+        _targets = new Transform[_targets.Length];
         if (_targets.Length == 0) Debug.LogError("No targets!");
 
         SelectNewTarget();
@@ -24,9 +28,20 @@ public class SecutityController : MonoBehaviour
         isWalking = true;
     }
 
-    private void OnTriggerEnter(Collider other)
+    [Inject]
+    private void Construct(SignalBus signalBus)
     {
-        
+        _signalBus = signalBus;
+        _signalBus.Subscribe<TargetsArrayChangedSignal>(TargetsArrayChanged);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.TryGetComponent<InDanceFloorTrigger>(out var inDanceFloorTrigger))
+        {
+            _targets = inDanceFloorTrigger.SecurityTargets;
+            Debug.Log("InDanceFloorTrigger was found in SecurityController");
+        }
     }
 
     /*[Inject]
@@ -88,7 +103,7 @@ public class SecutityController : MonoBehaviour
 
     private void TargetsArrayChanged()
     {
-        //_targets = _inDanceFloorTrigger.SecurityTargets;
+        _targets = _inDanceFloorTrigger.SecurityTargets;
 
         if (_agent.isActiveAndEnabled && _currentTarget != null && isWalking)
         {
@@ -99,5 +114,10 @@ public class SecutityController : MonoBehaviour
                 StartCoroutine(WaitRandomSeconds());
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        _signalBus.Unsubscribe<TargetsArrayChangedSignal>(TargetsArrayChanged);
     }
 }
