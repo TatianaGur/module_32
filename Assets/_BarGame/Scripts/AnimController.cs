@@ -8,7 +8,6 @@ public class AnimController : MonoBehaviour
 
     private NavMeshAgent _agent;
     private Animator _anim;
-    //private InDanceFloorTrigger _inDanceFloorTrigger;
 
     private float rotationSpeed;
     private bool isMoving;

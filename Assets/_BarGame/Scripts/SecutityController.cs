@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
-//using VContainer;
-using Zenject;
+using VContainer;
 
 public class SecutityController : MonoBehaviour
 {
@@ -15,9 +14,6 @@ public class SecutityController : MonoBehaviour
     private InDanceFloorTrigger _inDanceFloorTrigger;
 
 
-    private SignalBus _signalBus;
-
-
     private void Start()
     {
         _targets = new Transform[_targets.Length];
@@ -28,27 +24,19 @@ public class SecutityController : MonoBehaviour
         isWalking = true;
     }
 
-    [Inject]
-    private void Construct(SignalBus signalBus)
-    {
-        _signalBus = signalBus;
-        _signalBus.Subscribe<TargetsArrayChangedSignal>(TargetsArrayChanged);
-    }
-
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.TryGetComponent<InDanceFloorTrigger>(out var inDanceFloorTrigger))
         {
             _targets = inDanceFloorTrigger.SecurityTargets;
-            Debug.Log("InDanceFloorTrigger was found in SecurityController");
         }
     }
 
-    /*[Inject]
+    [Inject]
     public void Construct(InDanceFloorTrigger inDanceFloorTrigger)
     {
         _inDanceFloorTrigger = inDanceFloorTrigger;
-    }*/
+    }
 
     private void Update()
     {
@@ -93,12 +81,12 @@ public class SecutityController : MonoBehaviour
 
     private void OnEnable()
     {
-        //_inDanceFloorTrigger.TargetsArrayChangedEvent += TargetsArrayChanged;
+        _inDanceFloorTrigger.TargetsArrayChangedEvent += TargetsArrayChanged;
     }
 
     private void OnDisable()
     {
-        //_inDanceFloorTrigger.TargetsArrayChangedEvent -= TargetsArrayChanged;
+        _inDanceFloorTrigger.TargetsArrayChangedEvent -= TargetsArrayChanged;
     }
 
     private void TargetsArrayChanged()
@@ -114,10 +102,5 @@ public class SecutityController : MonoBehaviour
                 StartCoroutine(WaitRandomSeconds());
             }
         }
-    }
-
-    private void OnDestroy()
-    {
-        _signalBus.Unsubscribe<TargetsArrayChangedSignal>(TargetsArrayChanged);
     }
 }
