@@ -1,5 +1,3 @@
-﻿//using VContainer;
-//using VContainer.Unity;
-internal class TargetsArrayChangedSignal
+﻿internal class TargetsArrayChangedSignal
 {
 }

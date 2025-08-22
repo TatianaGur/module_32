@@ -8,7 +8,8 @@ public class SecutityController : MonoBehaviour
     [SerializeField] private NavMeshAgent _agent;
 
     private Transform _currentTarget;
-    private Transform[] _targets;
+    
+    [SerializeField] private Transform[] _targets;
 
     private bool isWalking;
     private InDanceFloorTrigger _inDanceFloorTrigger;
@@ -16,26 +17,23 @@ public class SecutityController : MonoBehaviour
 
     private void Start()
     {
-        _targets = new Transform[_targets.Length];
-        if (_targets.Length == 0) Debug.LogError("No targets!");
+        _targets = new Transform[0];
 
-        SelectNewTarget();
+        if (_agent == null) Debug.LogError("No _agent!");
 
         isWalking = true;
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.TryGetComponent<InDanceFloorTrigger>(out var inDanceFloorTrigger))
-        {
-            _targets = inDanceFloorTrigger.SecurityTargets;
-        }
     }
 
     [Inject]
     public void Construct(InDanceFloorTrigger inDanceFloorTrigger)
     {
+        Debug.Log("Construct вызван");///??????не вызывается
+
         _inDanceFloorTrigger = inDanceFloorTrigger;
+
+        if (_inDanceFloorTrigger == null) Debug.LogError("_inDanceFloorTrigger is null");
+
+        TargetsArrayChanged();//можно ли здесь в Construct?
     }
 
     private void Update()
@@ -47,6 +45,12 @@ public class SecutityController : MonoBehaviour
                 isWalking = false;
 
                 StartCoroutine(WaitRandomSeconds());
+
+
+
+
+                for (int i = 0; i < _targets.Length; i++)
+                    Debug.Log(_targets[i].name);
             }
         }
     }
@@ -63,9 +67,13 @@ public class SecutityController : MonoBehaviour
 
     private void SelectNewTarget()
     {
-        _currentTarget = _targets[Random.Range(0, _targets.Length)];
+        if (_targets == null || _targets.Length == 0) Debug.LogWarning("No targets available for security!");
+        else
+        {
+            _currentTarget = _targets[Random.Range(0, _targets.Length)];
 
-        _agent.SetDestination(_currentTarget.position);
+            _agent.SetDestination(_currentTarget.position);
+        }
     }
 
     private IEnumerator WaitRandomSeconds()
@@ -81,19 +89,20 @@ public class SecutityController : MonoBehaviour
 
     private void OnEnable()
     {
-        _inDanceFloorTrigger.TargetsArrayChangedEvent += TargetsArrayChanged;
+        if (_inDanceFloorTrigger != null) _inDanceFloorTrigger.TargetsArrayChangedEvent += TargetsArrayChanged;
+        else Debug.Log("InDanceTrigger = null");
     }
 
     private void OnDisable()
     {
-        _inDanceFloorTrigger.TargetsArrayChangedEvent -= TargetsArrayChanged;
+        if (_inDanceFloorTrigger != null) _inDanceFloorTrigger.TargetsArrayChangedEvent -= TargetsArrayChanged;
     }
 
     private void TargetsArrayChanged()
     {
-        _targets = _inDanceFloorTrigger.SecurityTargets;
+        if (_inDanceFloorTrigger != null) _targets = _inDanceFloorTrigger.SecurityTargets;
 
-        if (_agent.isActiveAndEnabled && _currentTarget != null && isWalking)
+        if (_agent.isActiveAndEnabled && _currentTarget != null && isWalking && _targets.Length > 0)
         {
             if (HasPathReady() && HasReachedDestination())
             {

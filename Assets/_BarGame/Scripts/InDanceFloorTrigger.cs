@@ -10,6 +10,11 @@ public class InDanceFloorTrigger : MonoBehaviour
     public Transform[] SecurityTargets;
 
 
+    private void Start()
+    {
+        if (SecurityTargets == null) SecurityTargets = new Transform[0];
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.TryGetComponent<AnimController>(out var animController))
@@ -35,7 +40,7 @@ public class InDanceFloorTrigger : MonoBehaviour
     {
         List<Transform> targetsList = new List<Transform>(SecurityTargets);
 
-        if (!targetsList.Contains(securityTargets)) targetsList.Add(securityTargets);
+        if (!targetsList.Contains(securityTargets) && securityTargets.name != "Security_1") targetsList.Add(securityTargets);
 
         SecurityTargets = targetsList.ToArray();
 
