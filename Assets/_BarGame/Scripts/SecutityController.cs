@@ -27,13 +27,11 @@ public class SecutityController : MonoBehaviour
     [Inject]
     public void Construct(InDanceFloorTrigger inDanceFloorTrigger)
     {
-        Debug.Log("Construct вызван");///??????не вызывается
-
         _inDanceFloorTrigger = inDanceFloorTrigger;
 
         if (_inDanceFloorTrigger == null) Debug.LogError("_inDanceFloorTrigger is null");
 
-        TargetsArrayChanged();//можно ли здесь в Construct?
+        TargetsArrayChanged();
     }
 
     private void Update()
@@ -45,12 +43,6 @@ public class SecutityController : MonoBehaviour
                 isWalking = false;
 
                 StartCoroutine(WaitRandomSeconds());
-
-
-
-
-                for (int i = 0; i < _targets.Length; i++)
-                    Debug.Log(_targets[i].name);
             }
         }
     }
@@ -102,7 +94,7 @@ public class SecutityController : MonoBehaviour
     {
         if (_inDanceFloorTrigger != null) _targets = _inDanceFloorTrigger.SecurityTargets;
 
-        if (_agent.isActiveAndEnabled && _currentTarget != null && isWalking && _targets.Length > 0)
+        if (_agent.isActiveAndEnabled && isWalking && _targets.Length > 0)
         {
             if (HasPathReady() && HasReachedDestination())
             {
